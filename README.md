@@ -1,2 +1,2 @@
 # seislab
-some experiment program and script
+Some experimental programs and scripts
