@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# this script compute and compare synthetic seismogram generate
+# by using Herrman CPS, Lupei Zhu and IRIS Axism program
+
+
 cd herrmann
 /bin/rm -rf 0450 B00101Z00.sac  B00102N00.sac B00103E00.sac date.end date.start dfile file96 hspec96.dat hspec96.grn
 DOIT
