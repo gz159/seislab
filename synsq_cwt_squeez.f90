@@ -8,7 +8,7 @@
 !--------------------------------------------------------------------------------
 !
 !    Fortran port by Dongik Jang (dongik.s.jang@gmail.com)
-
+ 
 SUBROUTINE synsq_cwt_squeeze(Wx, na, N, w, as, fs, dfs, lfm1, lfM2, out)
     IMPLICIT NONE
     
