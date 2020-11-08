@@ -10,9 +10,9 @@ import math
 #                 = 2 for f1,...,f6 notation
 #
 #         mf or mt - components of moment tensor
-#                 | mrr mrt mrp |    |  mxx  mxy -mxz |    | f1 f2 f3 |
-#                 | mtr mtt mtp | == |  myx  myy -myz | or | f2 f4 f5 |
-#                 | mpr mpt mpp |    | -mzx -mzy  mzz |    | f3 f5 f6 |
+#                 | mrr mrt mrp |    |  mxx -mxy  mxz |    | f1 f2 f3 |
+#                 | mtr mtt mtp | == | -myx  myy -myz | or | f2 f4 f5 |
+#                 | mpr mpt mpp |    |  mzx -mzy  mzz |    | f3 f5 f6 |
 #
 #              NOTE:
 #                   f1 = mrr =  mxx
