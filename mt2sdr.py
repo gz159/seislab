@@ -18,8 +18,8 @@ import math
 #                   f1 = mrr =  mxx
 #                   f2 = mtt =  myy
 #                   f3 = mpp =  mzz
-#                   f4 = mrt =  mxy
-#                   f5 = mrp = -mxz
+#                   f4 = mrt = -mxy
+#                   f5 = mrp =  mxz
 #                   f6 = mtp = -myz
 
 
