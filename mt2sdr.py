@@ -87,9 +87,14 @@ mt  = np.array([
 m,v = np.linalg.eig(mt)
 #idx = m.argsort()[::-1]  # sort m in descending order 
 idx = np.argsort(m) # sort eigen value m in ascending order
-m = m[idx] # sort eigen value m in ascending order
-v = v[:,idx] # sort eigen vector according eigen value
+m = m[idx] # sort eigen value m in ascending order (m1<m2<m3)
+# In theory, the first element of m correspond to P axis, 
+# the second element correspond to null axis, 
+# the third element correspond to T axis
+v = v[:,idx] # sort eigen vector according to eigen value
 
+# Now first colum of matrix v correspond to vector of P axis, the second colum of matrix v
+# correspond to vector of null axis and the third colum of v correspond to the vector of T axis
 # calculate P, null and T axis plunge and azimuth angle using eigen vector
 for i in range(3):
 	azm = np.rad2deg(np.arctan2(v[2][i],-v[1][i]))
