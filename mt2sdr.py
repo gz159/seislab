@@ -1,6 +1,20 @@
 import numpy as np
 import math
 
+#----------------------------------------------------------------------------------
+# According to moment tensor theory, the moment tensor Mij can be represent by it
+# eigen value mij and eigen vector ei
+#
+#             |m11  m12  m13|       |e1|       |e|        | |
+#       Mij = |m21  m22  m23| = m11*|e2| + m22*| | + m33* | |
+#             |m31  m32  m33|       |e3|       | |        | |
+#
+#     M = m11e1 + m22e2 + m33e3  and here we defined m11 >= m22 >= m33
+#
+# In this order, e1 vector repreent T axis, 
+#                e2 vector reprent null axis 
+#                e3 vector repreent P axis
+#-----------------------------------------------------------------------------------
 
 #         mtrep - moment tensor representation
 #                 = 0 for spherical coordinates (r=upper,t=south,p=east)
@@ -77,14 +91,7 @@ cmt=[2.180,-2.170,-0.018,1.260,-0.044,0.985]
 #      Mrr    Mtt   Mpp   Mrt    Mrp    Mtp
 # cmt=[-0.917,-0.028,0.946,0.069,-0.004,-0.025]
 
-# According to moment tensor theory, the moment tensor Mij can be represent by it
-# eigen value Mi and eigen vector ei
-#             |m11  m12  m13|
-#        Mij= |m21  m22  m23|
-#             |m31  m32  m33|
-#
-#
-#
+
 mt  = np.array([
 	[cmt[0],cmt[3],cmt[4]],
 	[cmt[3],cmt[1],cmt[5]],
