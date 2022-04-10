@@ -77,8 +77,14 @@ cmt=[2.180,-2.170,-0.018,1.260,-0.044,0.985]
 #      Mrr    Mtt   Mpp   Mrt    Mrp    Mtp
 # cmt=[-0.917,-0.028,0.946,0.069,-0.004,-0.025]
 
-
-
+# According to moment tensor theory, the moment tensor Mij can be represent by it
+# eigen value Mi and eigen vector ei
+#             |m11  m12  m13|
+#        Mij= |m21  m22  m23|
+#             |m31  m32  m33|
+#
+#
+#
 mt  = np.array([
 	[cmt[0],cmt[3],cmt[4]],
 	[cmt[3],cmt[1],cmt[5]],
@@ -88,7 +94,8 @@ m,v = np.linalg.eig(mt)
 #idx = m.argsort()[::-1]  # sort m in descending order 
 idx = np.argsort(m) # sort eigen value m in ascending order
 m = m[idx] # sort eigen value m in ascending order (m1<m2<m3)
-# In theory, the first element of m correspond to P axis, 
+# After sort m in ascening order,
+# the first element of m correspond to P axis, 
 # the second element correspond to null axis, 
 # the third element correspond to T axis
 v = v[:,idx] # sort eigen vector according to eigen value
