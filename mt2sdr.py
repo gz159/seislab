@@ -3,17 +3,17 @@ import math
 
 #----------------------------------------------------------------------------------
 # According to moment tensor theory, the moment tensor Mij can be represent by it
-# eigen value mij and eigen vector ei
+# eigen value Mi and eigen vector ei
 #
-#             |m11  m12  m13|       |e1|       |e|        | |
-#       Mij = |m21  m22  m23| = m11*|e2| + m22*| | + m33* | |
-#             |m31  m32  m33|       |e3|       | |        | |
+#             |m11  m12  m13|  
+#       Mij = |m21  m22  m23| 
+#             |m31  m32  m33|
 #
-#     M = m11e1 + m22e2 + m33e3  and here we defined m11 >= m22 >= m33
+#     M = M1e1e1 + M2e2e2 + M3e3e3  and here we defined M1 >= M2 >= M3
 #
-# In this order, e1 vector repreent T axis, 
+# In this order, e1 vector repreent Tension axis, 
 #                e2 vector reprent null axis 
-#                e3 vector repreent P axis
+#                e3 vector repreent Pressure axis
 #-----------------------------------------------------------------------------------
 
 #         mtrep - moment tensor representation
