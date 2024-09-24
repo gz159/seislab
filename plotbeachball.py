@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # plot earthquake focal mechanism with beachball
-
+# the beachball is circle of radius 1
 
 ### calculate moment tensor
 # use formula from SRL(1989),60(2) paper "A student guide and reviewer of moment tensors"
