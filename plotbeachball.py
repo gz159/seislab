@@ -156,7 +156,8 @@ for i in range(-20,20):
 plt.scatter(jxP, jyP, s=abs(aP*45), marker='^', c='blue')
 plt.text(jxP, jyP, str(aP), fontsize=8, ha='center', va='center')
 plt.scatter(jxT, jyT, s=abs(aT*45), marker='^', c='green')
-plt.text(jxT, jyT, str(aT), fontsize=8, ha='center', va='center')                    
+plt.text(jxT, jyT, str(aT), fontsize=8, ha='center', va='center') 
+
 circle = plt.Circle((0,0),1,color='black',fill=False)
 plt.gca().add_patch(circle)
 
