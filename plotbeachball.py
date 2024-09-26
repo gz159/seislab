@@ -2,8 +2,9 @@ import math
 import matplotlib.pyplot as plt
 import numpy as np
 
-# plot earthquake focal mechanism with beachball
+# beachball plot of earthquake focal mechanism
 # the beachball is circle of radius 1
+
 
 ### calculate moment tensor
 # use formula from SRL(1989),60(2) paper "A student guide and reviewer of moment tensors"
@@ -117,6 +118,10 @@ mt = dislocationtomt(strike,dip,rake,1)
 
 plt.figure(figsize=(6, 6))
 r = [0.0,0.0,0.0]
+aP = mt[0][0]
+aT = mt[0][0]
+jxP, jyP = 0, 0 
+jxT, jyT = 0, 0 
 for i in range(-20,20):
     x = i/20.0
     ymax = math.sqrt(1-x**2)
@@ -137,8 +142,21 @@ for i in range(-20,20):
                 for jj in range(3):
                     rpp += r[ii]*mt[ii][jj]*r[jj]
             if rpp > 0.0:
-                plt.scatter(x, y, s=rpp*25, c='red', edgecolors='black', linewidths=1)
-                #plt.text(x, y, str(j), fontsize=8, ha='center', va='center')
+                plt.scatter(x, y, s=rpp*25, c='red', edgecolors='white', linewidths=1)
+                #plt.text(x, y, str(rpp), fontsize=8, ha='center', va='center')
+            if rpp < aP:
+                    aP = rpp
+                    jxP = x
+                    jyP = y
+            if rpp > aT:
+                    aT = rpp
+                    jxT = x
+                    jyT = y
+
+plt.scatter(jxP, jyP, s=abs(aP*45), marker='^', c='blue')
+plt.text(jxP, jyP, str(aP), fontsize=8, ha='center', va='center')
+plt.scatter(jxT, jyT, s=abs(aT*45), marker='^', c='green')
+plt.text(jxT, jyT, str(aT), fontsize=8, ha='center', va='center')                    
 circle = plt.Circle((0,0),1,color='black',fill=False)
 plt.gca().add_patch(circle)
 
