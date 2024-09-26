@@ -137,7 +137,7 @@ for i in range(-20,20):
                 for jj in range(3):
                     rpp += r[ii]*mt[ii][jj]*r[jj]
             if rpp > 0.0:
-                plt.scatter(x, y, s=40, c='red', edgecolors='black', linewidths=1)
+                plt.scatter(x, y, s=rpp*25, c='red', edgecolors='black', linewidths=1)
                 #plt.text(x, y, str(j), fontsize=8, ha='center', va='center')
 circle = plt.Circle((0,0),1,color='black',fill=False)
 plt.gca().add_patch(circle)
