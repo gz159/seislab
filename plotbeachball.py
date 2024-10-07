@@ -34,12 +34,12 @@ def dislocationtomt(strike,dip,rake,m0):
    myz = -(np.cos(delta)*np.cos(lamda)*np.sin(phi)
            -np.cos(twodelta)*np.sin(lamda)*np.cos(phi))
     
-   mrr = mzz*m0
-   mrt = mxz*m0
-   mrp =-myz*m0
-   mtt = mxx*m0
-   mtp =-mxy*m0
-   mpp = myy*m0
+   mrr =  mzz*m0
+   mrt =  mxz*m0
+   mrp = -myz*m0
+   mtt =  mxx*m0
+   mtp = -mxy*m0
+   mpp =  myy*m0
    
    m[0][0] = mxx
    m[0][1] = mxy
@@ -111,7 +111,7 @@ def getaux(strike1, dip1, rake1):
 ######################## main program ####################
 
 # Focal mechanism represents with strike dpi, rake, m0
-strike, dip, rake = 194, 80, -93
+strike, dip, rake = 203.0, 10.0, 88.0
 strike1, dip1, rake1 = getaux(strike, dip, rake)
 
 mt = dislocationtomt(strike,dip,rake,1)
@@ -120,8 +120,8 @@ plt.figure(figsize=(6, 6))
 r = [0.0,0.0,0.0]
 aP = mt[0][0]
 aT = mt[0][0]
-jxP, jyP = 0, 0 
-jxT, jyT = 0, 0 
+jxP, jyP = 0.0, 0.0 
+jxT, jyT = 0.0, 0.0 
 for i in range(-20,20):
     x = i/20.0
     ymax = math.sqrt(1-x**2)
@@ -142,8 +142,13 @@ for i in range(-20,20):
                 for jj in range(3):
                     rpp += r[ii]*mt[ii][jj]*r[jj]
             if rpp > 0.0:
-                plt.scatter(x, y, s=rpp*25, c='red', edgecolors='white', linewidths=1)
+                plt.scatter(x, y, s=rpp*55, c='red', edgecolors='white', linewidths=1)
                 #plt.text(x, y, str(rpp), fontsize=8, ha='center', va='center')
+            if rpp < 0.0:
+                plt.scatter(x, y, s=abs(rpp*55), c='blue', edgecolors='white', linewidths=1)
+                #plt.text(x, y, str(rpp), fontsize=8, ha='center', va='center')
+            if rpp > -0.033 and rpp < 0.033:
+                plt.scatter(x, y, s=45, c='black')
             if rpp < aP:
                     aP = rpp
                     jxP = x
@@ -153,11 +158,11 @@ for i in range(-20,20):
                     jxT = x
                     jyT = y
 
-plt.scatter(jxP, jyP, s=abs(aP*45), marker='^', c='blue')
+plt.scatter(jxP, jyP, s=abs(aP*55), marker='^', c='blue')
 plt.text(jxP, jyP, str(aP), fontsize=8, ha='center', va='center')
-plt.scatter(jxT, jyT, s=abs(aT*45), marker='^', c='green')
-plt.text(jxT, jyT, str(aT), fontsize=8, ha='center', va='center') 
-
+plt.scatter(jxT, jyT, s=abs(aT*55), marker='^', c='green')
+plt.text(jxT, jyT, str(aT), fontsize=8, ha='center', va='center')    
+                
 circle = plt.Circle((0,0),1,color='black',fill=False)
 plt.gca().add_patch(circle)
 
