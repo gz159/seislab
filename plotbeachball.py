@@ -1,4 +1,3 @@
-import math
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -9,38 +8,38 @@ import numpy as np
 ### calculate moment tensor
 # use formula from SRL(1989),60(2) paper "A student guide and reviewer of moment tensors"
 def dislocationtomt(strike,dip,rake,m0):
-   
+
    m = np.empty((3,3))
    phi      = (strike*np.pi)/180.
    twophi   = phi*2.
    delta    = (dip*np.pi)/180.
    twodelta = delta*2.
    lamda    = (rake*np.pi)/180.
-    
+
    mxx = -(np.sin(delta)*np.cos(lamda)*np.sin(twophi)
            +np.sin(twodelta)*np.sin(lamda)*np.sin(phi)*np.sin(phi))
-   
+
    myy =  (np.sin(delta)*np.cos(lamda)*np.sin(twophi)
            -np.sin(twodelta)*np.sin(lamda)*np.cos(phi)*np.cos(phi))
-   
+
    mzz =  (np.sin(twodelta)*np.sin(lamda))
-   
+
    mxy =  (np.sin(delta)*np.cos(lamda)*np.cos(twophi)
            +0.5*np.sin(twodelta)*np.sin(lamda)*np.sin(twophi))
-   
+
    mxz = -(np.cos(delta)*np.cos(lamda)*np.cos(phi)
            +np.cos(twodelta)*np.sin(lamda)*np.sin(phi))
-   
+
    myz = -(np.cos(delta)*np.cos(lamda)*np.sin(phi)
            -np.cos(twodelta)*np.sin(lamda)*np.cos(phi))
-    
+
    mrr =  mzz*m0
    mrt =  mxz*m0
    mrp = -myz*m0
    mtt =  mxx*m0
    mtp = -mxy*m0
    mpp =  myy*m0
-   
+
    m[0][0] = mxx
    m[0][1] = mxy
    m[0][2] = mxz
@@ -50,10 +49,10 @@ def dislocationtomt(strike,dip,rake,m0):
    m[1][0] = m[0][1]
    m[2][0] = m[0][2]
    m[2][1] = m[1][2]
-   
-   return m 
+
+   return m
    #return mrr,mtt,mpp,mrt,mrp,mtp
-   
+
    # using focal mechansim parameter strike dip rake to
    # get its stereographic equal area projction plane
 def pnodal(strike,dip,rake):
@@ -62,25 +61,25 @@ def pnodal(strike,dip,rake):
     rake   = (rake*np.pi)/180.
     px = []
     py = []
-    #px.append(math.cos(strike))
-    #py.append(math.sin(strike))
+    #px.append(np.cos(strike))
+    #py.append(np.sin(strike))
     for i in range(0,180):
         ii = i*np.pi/180
-        x = math.cos(strike)*math.cos(ii)-math.sin(strike)*math.sin(ii)*math.cos(dip)
-        y = math.sin(strike)*math.cos(ii)+math.cos(strike)*math.sin(ii)*math.cos(dip)
-        z = math.sin(ii)*math.sin(dip)
-        azimuth = math.atan2(y,x)
-        ain = math.atan2(math.sqrt(1-z**2),z)
-        r = math.sqrt(2)*math.sin(ain/2.0)
-        px.append(r*math.sin(azimuth))
-        py.append(r*math.cos(azimuth))
-        
+        x = np.cos(strike)*np.cos(ii)-np.sin(strike)*np.sin(ii)*np.cos(dip)
+        y = np.sin(strike)*np.cos(ii)+np.cos(strike)*np.sin(ii)*np.cos(dip)
+        z = np.sin(ii)*np.sin(dip)
+        azimuth = np.atan2(y,x)
+        ain = np.atan2(np.sqrt(1-z**2),z)
+        r = np.sqrt(2)*np.sin(ain/2.0)
+        px.append(r*np.sin(azimuth))
+        py.append(r*np.cos(azimuth))
+
     return px,py
 
 # GETAUX returns auxilary fault plane strike, dip & rake,
 # given strike,dip,rake of main fault plane.
 def getaux(strike1, dip1, rake1):
-    
+
    degrad = 180./3.1415927
    s1 = strike1/degrad
    d1 = dip1/degrad
@@ -120,23 +119,23 @@ plt.figure(figsize=(6, 6))
 r = [0.0,0.0,0.0]
 aP = mt[0][0]
 aT = mt[0][0]
-jxP, jyP = 0.0, 0.0 
-jxT, jyT = 0.0, 0.0 
+jxP, jyP = 0.0, 0.0
+jxT, jyT = 0.0, 0.0
 for i in range(-20,20):
     x = i/20.0
-    ymax = math.sqrt(1-x**2)
+    ymax = np.sqrt(1-x**2)
     m = int(20.0*ymax)
     #print(m)
     if m > 0:
         #print(m)
         for j in range(-m,m):
             y    = j/20.0
-            rad  = math.sqrt(x**2+y**2)
-            azi  = math.atan2(x,y)
-            ain  = 2.0*math.asin(rad/math.sqrt(2.0))
-            r[0] = math.sin(ain)*math.cos(azi)
-            r[1] = math.sin(ain)*math.sin(azi)
-            r[2] = math.cos(ain)
+            rad  = np.sqrt(x**2+y**2)
+            azi  = np.atan2(x,y)
+            ain  = 2.0*np.asin(rad/np.sqrt(2.0))
+            r[0] = np.sin(ain)*np.cos(azi)
+            r[1] = np.sin(ain)*np.sin(azi)
+            r[2] = np.cos(ain)
             rpp  = 0.0
             for ii in range(3):
                 for jj in range(3):
@@ -161,8 +160,8 @@ for i in range(-20,20):
 plt.scatter(jxP, jyP, s=abs(aP*55), marker='^', c='blue')
 plt.text(jxP, jyP, str(aP), fontsize=8, ha='center', va='center')
 plt.scatter(jxT, jyT, s=abs(aT*55), marker='^', c='green')
-plt.text(jxT, jyT, str(aT), fontsize=8, ha='center', va='center')    
-                
+plt.text(jxT, jyT, str(aT), fontsize=8, ha='center', va='center')
+
 circle = plt.Circle((0,0),1,color='black',fill=False)
 plt.gca().add_patch(circle)
 
@@ -174,7 +173,7 @@ plt.plot(x,y,color='purple',linewidth=2)
 
 plt.xlim(-1, 1)
 plt.ylim(-1, 1)
-title='strike=%d,dip=%d,rake=%d'%(strike,dip,rake)     
+title='strike=%d,dip=%d,rake=%d'%(strike,dip,rake)
 plt.title(title)
 
 # 显示网格
