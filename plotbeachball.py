@@ -367,13 +367,14 @@ values = []
 # ++++++++ using gCMT moment tensor to plot beachball ++++++++++++
 # “南(x) - 东(y) - 上(z)”系统
 #     0(zz) 1(xx)  2(yy)  3(xz)  4(-yz) 5(-xy)
-# cmt=[0.801, 0.026, -0.827, -1.010, -0.349, -0.598]
+#cmt=[0.801, 0.026, -0.827, -1.010, -0.349, -0.598]
 #      Mrr    Mtt   Mpp   Mrt    Mrp    Mtp
-# cmt=[-1.770, 0.855, 0.919, -0.484, 0.235, -0.613]
-# cmt=[-0.367, 2.770, -2.400, 0.238, 0.943, -0.351]
-cmt = [0.817, -0.238, -0.579, 0.213, 0.334, -0.413]
-# cmt=[0.854, -1.070, 0.212, -1.520, -4.270, -1.520]
-# cmt=[-0.003, 0.133, -0.130, 0.612, 0.084, 4.330]
+cmt=[-1.770, 0.855, 0.919, -0.484, 0.235, -0.613]
+#cmt=[-0.367, 2.770, -2.400, 0.238, 0.943, -0.351]
+#cmt = [0.817, -0.238, -0.579, 0.213, 0.334, -0.413]
+#cmt=[0.854, -1.070, 0.212, -1.520, -4.270, -1.520]
+#cmt=[-0.003, 0.133, -0.130, 0.612, 0.084, 4.330]
+cmt=[0.256, -0.597, 0.341, -0.250, 0.418, 0.197]
 
 # Mxx = Mtt
 # Myy = Mpp
@@ -444,10 +445,18 @@ for i in range(-20, 20):
                 jxT = x
                 jyT = y
 
+# Define the rounded box properties
+bbox_properties = dict(
+    boxstyle="round,pad=0.25",  # 'round' makes it a rounded box
+    facecolor="white",     # Fill color of the box
+    edgecolor="white",          # Border color
+    linewidth=0.5,               # Border thickness
+    alpha=1                  # Transparency
+)
 # plt.scatter(jxP, jyP, s=abs(aP*55), marker='^', c='blue')
-# plt.text(jxP, jyP, str(aP), fontsize=8, ha='center', va='center')
+plt.text(jxP, jyP, str("P"), c="red", fontsize=12, ha='center', va='center',bbox=bbox_properties)
 # plt.scatter(jxT, jyT, s=abs(aT*55), marker='^', c='green')
-# plt.text(jxT, jyT, str(aT), fontsize=8, ha='center', va='center')
+plt.text(jxT, jyT, str("T"), c="red", fontsize=12, ha='center', va='center',bbox=bbox_properties)
 
 # 第二步：找出辐射花样数值的最大绝对值，用于归一化绘图中小圆的大小
 max_abs_rpp = max([abs(v) for v in values]) if values else 1.0
