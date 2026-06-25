@@ -119,7 +119,7 @@ def getaux(strike1, dip1, rake1):
 # 核心计算函数：直接根据物理公式计算值，不需要插值查找
 def get_mt_value_at_coord(x, y, mt):
     #   直接根据坐标计算矩张量投影值，替代缓慢的插值过程
-    #   不用自己写三角形剖分代码
+    #   不用自己写三角形剖分代码(非常慢)
     rad = np.sqrt(x**2 + y**2)
     if rad > 1.0:
        return 0.0
