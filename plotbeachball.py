@@ -118,8 +118,7 @@ def getaux(strike1, dip1, rake1):
 # ...............................
 # 核心计算函数：直接根据物理公式计算值，不需要插值查找
 def get_mt_value_at_coord(x, y, mt):
-    #   直接根据坐标计算矩张量投影值，替代缓慢的插值过程
-    #   不用自己写三角形剖分代码(非常慢)
+    # 直接根据坐标计算矩张量投影值，替代缓慢的插值过程
     rad = np.sqrt(x**2 + y**2)
     if rad > 1.0:
        return 0.0
@@ -143,7 +142,8 @@ def get_mt_value_at_coord(x, y, mt):
 
 
 def marching_squares_optimized(mt, resolution=300):
-    """优化版的 Marching Squares，直接生成网格并提取线段"""
+    #   优化版的 Marching Squares，直接生成网格并提取线段
+    #   不用自己写三角形剖分代码(非常慢)
     print(f"执行优化算法: 分辨率 {resolution}x{resolution}...")
 
     x_range = np.linspace(-1, 1, resolution)
