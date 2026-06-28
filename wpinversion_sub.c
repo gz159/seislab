@@ -447,9 +447,7 @@ void prad_pat(double **TM, FILE *ps)
     int npts = 0;
 
     r = double_alloc(3) ;
-    //fprintf(ps,"1 setlinecap\n") ;
-    //fprintf(ps,"0.03 setlinewidth\n") ;
-    //fprintf(ps,"newpath\n") ;
+
     for(i=-N; i<=N; i++)
     {
         x    = ((double)i)/((double)N) ;
@@ -484,36 +482,31 @@ void prad_pat(double **TM, FILE *ps)
         }
     }
 
+    fprintf(ps,"0.01 setlinewidth\n")   ;
+    fprintf(ps,"newpath\n") ;
+    fprintf(ps,"1 0 moveto\n")      ;
+    fprintf(ps,"0 0 1 0 360 arc\n") ;
+    fprintf(ps,"closepath\n") ;
+    fprintf(ps,"stroke\n")          ;
+
+    fprintf(ps,"newpath\n") ;
+    fprintf(ps,"1 0 moveto\n")      ;
+    fprintf(ps,"0 0 1 0 360 arc\n") ;
+    fprintf(ps,"closepath\n") ;
+    fprintf(ps,"clip\n") ;
     double max_abs = 0.0;
     for (int i=0;i<npts;i++) if (fabs(values[i]) > max_abs) max_abs = fabs(values[i]);
     //if (max_abs < 1e-15) max_abs = 1.0;
-    double base_size = 0.002;
-    // 绘制正值圆点 (黑色填充，白边)
+    double base_size = 0.0018;
+    // 绘制正值圆点 (黑色填充)
     for (int i=0;i<npts;i++) {
         if (values[i] > 0.0) {
             double s_norm = (values[i] / max_abs) * base_size;
             double rp = sqrt(s_norm / PI);
-            //if (rp < 0.1) continue;
-            double xp = points_x[i] ;
-            double yp = points_y[i] ;
-            //fprintf(ps,"%7.2f %7.2f .01 add exch moveto\n",y,x) ;
-            //fprintf(ps,"  0   0   rlineto stroke\n")      ;
-
-            fprintf(ps, "newpath %g %g %g 0 360 arc fill\n", xp, yp, rp);
-            //fprintf(ps, "gsave\n");
-            //fprintf(ps, "0 0 0 setrgbcolor\n");
-            //fprintf(ps, "0.5 setlinewidth\n");
-            //fprintf(ps, "newpath %g %g %g 0 360 arc stroke\n", xp, yp, rp);
-            //fprintf(ps, "grestore\n");
-            //fprintf(ps, "0 0 0 setrgbcolor\n");
+            fprintf(ps, "newpath %g %g %g 0 360 arc fill\n", points_x[i], points_y[i], rp);
         }
     }
-
-    //fprintf(ps,"0  0  0 setrgbcolor\n") ;
-    fprintf(ps,"0.01 setlinewidth\n")   ;
-    fprintf(ps,"1 0 moveto\n")      ;
-    fprintf(ps,"0 0 1 0 360 arc\n") ;
-    fprintf(ps,"stroke\n")          ;
+    fprintf(ps,"initclip\n") ;
     free((void*)r) ;
     free((void*)points_x) ;
     free((void*)points_y) ;
