@@ -3306,17 +3306,12 @@ void plot_contour_zero(double **TM, FILE *ps)
         double *xs = lines[i][0], *ys = lines[i][1];
         int len = line_lens[i];
         fprintf(ps, "%g %g %g setrgbcolor\n", cols[i%2][0], cols[i%2][1], cols[i%2][2]);
-        //fprintf(ps, "1.5 setlinewidth\n");
         fprintf(ps, "newpath\n");
         for (int j=0;j<len;j++) {
-            //double xp = TO_PS_X(xs[j]);
-            //double yp = TO_PS_Y(ys[j]);
             if (j==0) fprintf(ps, "%g %g moveto\n", xs[j], ys[j]);
             else fprintf(ps, "%g %g lineto\n", xs[j], ys[j]);
         }
         fprintf(ps, "stroke\n");
-        //fprintf(ps, "0 setlinewidth\n");
-        //fprintf(ps, "0 0 0 setrgbcolor\n");
         free(xs); free(ys); free(lines[i]);
     }
     free(lines); free(line_lens);
