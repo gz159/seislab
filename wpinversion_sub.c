@@ -50,6 +50,7 @@
 
 /* To avoid the warning with gcc (Debian 4.3.2-1.1) */
 double round(double x);
+void plot_contour_zero(double **TM, FILE *ps); 
 
 void save_trace(double *TH, sachdr hdr, char *file)
 {
