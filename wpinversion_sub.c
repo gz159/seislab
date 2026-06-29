@@ -51,6 +51,7 @@
 /* To avoid the warning with gcc (Debian 4.3.2-1.1) */
 double round(double x);
 void plot_contour_zero(double **TM, FILE *ps); 
+void prad_pat_zero(double **TM, FILE *ps);
 
 void save_trace(double *TH, sachdr hdr, char *file)
 {
@@ -109,7 +110,8 @@ void output_products(structopt *opt, str_quake_params *eq, double s1a, double d1
         if(opt->ref_flag)
             tmp=0.5;
         fprintf(ps,"%5.2f %5.2f translate\n",1.1-tmp,0.12+tmp/10.0) ;
-        prad_pat(TMa, ps) ;
+        //prad_pat(TMa, ps) ;
+        prad_pat_zero(TMa, ps) ;
         pnod_pat(&s1a,&d1a,ps) ;
         pnod_pat(&s2a,&d2a,ps) ;
         plot_contour_zero(TMa, ps) ;
@@ -329,7 +331,8 @@ void output_products(structopt *opt, str_quake_params *eq, double s1a, double d1
             fprintf(ps, "%15.6f %15.6f moveto\n", -1.1, -1.6) ;
             fprintf(ps,"(ratio = %5.2f ;  epsilon = %6.3f) show\n",M0b/M0a,mc) ;
             fprintf(ps,".5 .5 .9 setrgbcolor\n") ;
-            prad_pat(TMb, ps)        ;
+            //prad_pat(TMb, ps)        ;
+            prad_pat_zero(TMb, ps)        ;
             fprintf(ps,".5 .5 .9 setrgbcolor\n") ;
             pnod_pat(&s1b, &d1b, ps) ;
             fprintf(ps,".5 .5 .9 setrgbcolor\n") ;
@@ -430,8 +433,6 @@ void output_products(structopt *opt, str_quake_params *eq, double s1a, double d1
     free((void**)sta)     ;
 }
 
-
-
 /*******************************/
 /*       prad_pat(TM, ps)      */
 /*******************************/
@@ -444,11 +445,9 @@ void prad_pat(double **TM, FILE *ps)
     double x, y, ymax, rad ;
     double azi, ain, rpp, *r  ;
 
-    double *points_x = NULL, *points_y = NULL, *values = NULL;
-    int npts = 0;
-
     r = double_alloc(3) ;
 
+    fprintf(ps,"newpath\n") ;
     for(i=-N; i<=N; i++)
     {
         x    = ((double)i)/((double)N) ;
@@ -470,49 +469,21 @@ void prad_pat(double **TM, FILE *ps)
                 for(k=0; k<3; k++)
                     for(l=0; l<3; l++)
                         rpp = rpp + r[k]*TM[k][l]*r[l] ;
-                //if(rpp > 0.) 
-                //{
-                //    fprintf(ps,"%7.2f %7.2f .01 add exch moveto\n",y,x) ;
-                //    fprintf(ps,"  0   0   rlineto stroke\n")      ; 
-                //}
-                points_x = (double*)realloc(points_x, (npts+1)*sizeof(double));
-                points_y = (double*)realloc(points_y, (npts+1)*sizeof(double));
-                values = (double*)realloc(values, (npts+1)*sizeof(double));
-                points_x[npts] = x; points_y[npts] = y; values[npts] = rpp; npts++;
+                if(rpp > 0.) 
+                {
+                    fprintf(ps,"%7.2f %7.2f .01 add exch moveto\n",y,x) ;
+                    fprintf(ps,"%7.2f %7.2f 0.01 0 360 arc\n",x,y)      ; 
+                }
             }
         }
     }
-
-    fprintf(ps,"0.01 setlinewidth\n")   ;
-    fprintf(ps,"newpath\n") ;
     fprintf(ps,"1 0 moveto\n")      ;
     fprintf(ps,"0 0 1 0 360 arc\n") ;
-    fprintf(ps,"closepath\n") ;
     fprintf(ps,"stroke\n")          ;
-
-    fprintf(ps,"newpath\n") ;
-    fprintf(ps,"1 0 moveto\n")      ;
-    fprintf(ps,"0 0 1 0 360 arc\n") ;
-    fprintf(ps,"closepath\n") ;
-    fprintf(ps,"clip\n") ;
-    double max_abs = 0.0;
-    for (int i=0;i<npts;i++) if (fabs(values[i]) > max_abs) max_abs = fabs(values[i]);
-    //if (max_abs < 1e-15) max_abs = 1.0;
-    double base_size = 0.0018;
-    // 绘制正值圆点 (黑色填充)
-    for (int i=0;i<npts;i++) {
-        if (values[i] > 0.0) {
-            double s_norm = (values[i] / max_abs) * base_size;
-            double rp = sqrt(s_norm / PI);
-            fprintf(ps, "newpath %g %g %g 0 360 arc fill\n", points_x[i], points_y[i], rp);
-        }
-    }
-    fprintf(ps,"initclip\n") ;
     free((void*)r) ;
-    free((void*)points_x) ;
-    free((void*)points_y) ;
-    free((void*)values) ;
 }
+
+
 
 /***************************************/
 /*           pnod_pat(s, d, ps)        */
@@ -3349,4 +3320,86 @@ void plot_contour_zero(double **TM, FILE *ps)
         free(xs); free(ys); free(lines[i]);
     }
     free(lines); free(line_lens);
+}
+
+/*******************************/
+/*       prad_pat_zero(TM, ps)      */
+/*******************************/
+/* Plot ps beach ball          */
+/* Input: TM : moment tensor   */
+/*        ps : ps FILE stream  */
+void prad_pat_zero(double **TM, FILE *ps)
+{
+    int    i, j, k, l, N = 20, M ;
+    double x, y, ymax, rad ;
+    double azi, ain, rpp, *r  ;
+
+    double *points_x = NULL, *points_y = NULL, *values = NULL;
+    int npts = 0;
+
+    r = double_alloc(3) ;
+
+    for(i=-N; i<=N; i++)
+    {
+        x    = ((double)i)/((double)N) ;
+        ymax = sqrt(1.-x*x) ;
+        M = (int) (((double)N)*ymax);
+        if (M > 0) 
+        {
+            for(j=-M; j<=M; j++)
+            {
+                y    = ((double)j)/((double)N) ;
+                rad  = sqrt(x*x+y*y)           ;
+                azi  = atan2(x,y)              ;
+                ain  = 2.*asin(rad/sqrt(2.))   ;
+                r[0] = sin(ain)*cos(azi)       ;
+                r[1] = sin(ain)*sin(azi)       ;
+                r[2] = cos(ain)                ;
+                rpp   = 0.                     ;
+
+                for(k=0; k<3; k++)
+                    for(l=0; l<3; l++)
+                        rpp = rpp + r[k]*TM[k][l]*r[l] ;
+                //if(rpp > 0.) 
+                //{
+                //    fprintf(ps,"%7.2f %7.2f .01 add exch moveto\n",y,x) ;
+                //    fprintf(ps,"  0   0   rlineto stroke\n")      ; 
+                //}
+                points_x = (double*)realloc(points_x, (npts+1)*sizeof(double));
+                points_y = (double*)realloc(points_y, (npts+1)*sizeof(double));
+                values = (double*)realloc(values, (npts+1)*sizeof(double));
+                points_x[npts] = x; points_y[npts] = y; values[npts] = rpp; npts++;
+            }
+        }
+    }
+
+    fprintf(ps,"0.01 setlinewidth\n")   ;
+    fprintf(ps,"newpath\n") ;
+    fprintf(ps,"1 0 moveto\n")      ;
+    fprintf(ps,"0 0 1 0 360 arc\n") ;
+    fprintf(ps,"closepath\n") ;
+    fprintf(ps,"stroke\n")          ;
+
+    fprintf(ps,"newpath\n") ;
+    fprintf(ps,"1 0 moveto\n")      ;
+    fprintf(ps,"0 0 1 0 360 arc\n") ;
+    fprintf(ps,"closepath\n") ;
+    fprintf(ps,"clip\n") ;
+    double max_abs = 0.0;
+    for (int i=0;i<npts;i++) if (fabs(values[i]) > max_abs) max_abs = fabs(values[i]);
+    //if (max_abs < 1e-15) max_abs = 1.0;
+    double base_size = 0.0018;
+    // 绘制正值圆点 (黑色填充)
+    for (int i=0;i<npts;i++) {
+        if (values[i] > 0.0) {
+            double s_norm = (values[i] / max_abs) * base_size;
+            double rp = sqrt(s_norm / PI);
+            fprintf(ps, "newpath %g %g %g 0 360 arc fill\n", points_x[i], points_y[i], rp);
+        }
+    }
+    fprintf(ps,"initclip\n") ;
+    free((void*)r) ;
+    free((void*)points_x) ;
+    free((void*)points_y) ;
+    free((void*)values) ;
 }
